@@ -49,6 +49,30 @@ def main():
         timestamp, img = cvSink.grabFrame(img)
         LineDetect.process(img)
         sd.putNumber('NbLinesDetectedNew',len(LineDetect.filter_lines_output))
+        Xmean1 = 0
+        Xmean2 = 0
+        Ymean1 = 0
+        Ymean2 = 0
+        angle = 0
+        nbLigne = len(LineDetect.filter_lines_output)
+        for ligne in LineDetect.filter_lines_output:
+            Xmean1 += ligne.x1
+            Xmean2 += ligne.x2
+            Ymean1 += ligne.y1
+            Ymean2 += ligne.y2
+            angle += ligne.angle()
+
+        if nbLigne:
+            Ymean1 /= nbLigne
+            Ymean2 /= nbLigne
+            Xmean1 /= nbLigne
+            Xmean2 /= nbLigne
+            angle /= nbLigne
+        sd.putNumber('Xmean1',Xmean1)
+        sd.putNumber('Xmean2',Xmean2)
+        sd.putNumber('Ymean1',Ymean1)
+        sd.putNumber('Ymean2',Ymean2)
+        sd.putNumber('Angle',angle)
         time.sleep(0.1)
         
     #capture.release()
